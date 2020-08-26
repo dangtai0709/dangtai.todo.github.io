@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import {removeTasks,updateTasks} from '../../../actions/TaskList'
-import { connect } from 'react-redux';
+import { removeTasks, updateTasks } from "../../../actions/TaskList";
+import { connect } from "react-redux";
 class List extends Component {
   constructor(props) {
     super(props);
@@ -17,40 +17,49 @@ class List extends Component {
       [name]: value,
     }));
   }
-  handleEdit(value){
+  handleEdit(value) {
     this.setState((prevState) => ({
-        ...prevState,
-        edit: value,
-      }));
+      ...prevState,
+      edit: value,
+    }));
   }
-  handleSubmit(){
-      if(!this.state.name) return;
-      let data = {...this.props.task,...this.state};
-      delete data.edit
-      delete data.id
-      this.props.updateData(this.props.task.id,data)
-      this.handleEdit(false);
-      this.props.onSubmit()
+  handleSubmit(checkbox = false) {
+    if (!this.state.name) return;
+    let data = { ...this.props.task, ...this.state };
+    if (checkbox) {
+      data.status = data.status ? "" : "completed";
+    }
+    delete data.edit;
+    delete data.id;
+    this.props.updateData(this.props.task.id, data);
+    this.handleEdit(false);
+    this.props.onSubmit();
   }
-  handleRemove(){
-    this.props.removeData(this.props.task.id)
-    this.props.onSubmit()
-}
+  handleRemove() {
+    this.props.removeData(this.props.task.id);
+    this.props.onSubmit();
+  }
   render() {
     return (
       <li className={this.props.task.status === "completed" ? "completed" : ""}>
         <div className="form-check">
           {this.state.edit ? (
-              <div>
-            <input
-              className="form-control todo-list-input"
-              type="text"
-              name="name"
-              placeholder="Default input"
-              value={this.state.name}
-              onChange={this.handleChange}
-            ></input>
-            <button type="submit" className="btn btn-primary mt-1" onClick={()=>this.handleSubmit(true)}>Submit</button>
+            <div>
+              <input
+                className="form-control todo-list-input"
+                type="text"
+                name="name"
+                placeholder="Default input"
+                value={this.state.name}
+                onChange={this.handleChange}
+              ></input>
+              <button
+                type="submit"
+                className="btn btn-primary mt-1"
+                onClick={() => this.handleSubmit()}
+              >
+                Submit
+              </button>
             </div>
           ) : (
             <label className="form-check-label">
@@ -58,26 +67,31 @@ class List extends Component {
                 className="checkbox"
                 type="checkbox"
                 defaultChecked={this.props.task.status === "completed"}
+                onClick={() => this.handleSubmit(true)}
               />
               {this.props.task.name}
               <i className="input-helper"></i>
             </label>
           )}
         </div>
-        <i className="remove mdi mdi-close-circle-outline" onClick={()=>this.handleRemove()}></i>
-        {!this.state.edit &&
         <i
-          className="fa fa-edit cursor-pointer m-2"
-          onClick={()=>this.handleEdit(true)}
-        ></i>}
+          className="remove mdi mdi-close-circle-outline"
+          onClick={() => this.handleRemove()}
+        ></i>
+        {!this.state.edit && (
+          <i
+            className="fa fa-edit cursor-pointer m-2"
+            onClick={() => this.handleEdit(true)}
+          ></i>
+        )}
       </li>
     );
   }
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-      removeData: (data) => dispatch(removeTasks(data)),
-      updateData: (id,data) => dispatch(updateTasks(id,data)),
+    removeData: (data) => dispatch(removeTasks(data)),
+    updateData: (id, data) => dispatch(updateTasks(id, data)),
   };
 };
-export default connect(null,mapDispatchToProps)(List);
+export default connect(null, mapDispatchToProps)(List);
