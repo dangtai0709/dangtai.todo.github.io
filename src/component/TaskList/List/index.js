@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-
+import {removeTasks,updateTasks} from '../../../actions/TaskList'
+import { connect } from 'react-redux';
 class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
       edit: false,
-      string: props.task.name,
+      name: props.task.name,
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -24,9 +25,13 @@ class List extends Component {
   }
   handleSubmit(){
       this.handleEdit(false);
+      let data = {...this.props.task,...this.state};
+      delete data.edit
+      delete data.id
+      this.props.updateData(this.props.task.id,data)
   }
   handleRemove(){
-  console.log('x')
+    this.props.removeData(this.props.task.id)
 }
   render() {
     return (
@@ -37,9 +42,9 @@ class List extends Component {
             <input
               className="form-control todo-list-input"
               type="text"
-              name="string"
+              name="name"
               placeholder="Default input"
-              value={this.state.string}
+              value={this.state.name}
               onChange={this.handleChange}
             ></input>
             <button type="submit" className="btn btn-primary mt-1" onClick={()=>this.handleSubmit(true)}>Submit</button>
@@ -66,5 +71,10 @@ class List extends Component {
     );
   }
 }
-
-export default List;
+const mapDispatchToProps = (dispatch) => {
+  return {
+      removeData: (data) => dispatch(removeTasks(data)),
+      updateData: (id,data) => dispatch(updateTasks(id,data)),
+  };
+};
+export default connect(null,mapDispatchToProps)(List);

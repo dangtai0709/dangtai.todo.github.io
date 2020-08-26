@@ -1,38 +1,35 @@
 import "./TaskList.css";
-import React, { Component } from "react";
+import React, { Component} from "react";
 import List from "./List";
+import {getTasks,addTasks} from '../../actions/TaskList'
+import { connect } from 'react-redux';
 class TaskList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tasks: [
-        {
-          name: "Print bills",
-          status: "",
-        },
-        {
-          name: "Call Rampbo",
-          status: "completed",
-        },
-        {
-          name: "Print Statements all",
-          status: "",
-        },
-        {
-          name: "it be advisable for me to think about business content?",
-          status: "completed",
-        },
-        {
-          name: "For what reason would it be advisable for me to think.",
-          status: "",
-        },
-        {
-          name: "For what reason would it be advisable.",
-          status: "completed",
-        },
-      ],
+      name:'',
+      status:''
     };
+    this.handleChange = this.handleChange.bind(this);
   }
+  handleChange(event) {
+    const { name, value } = event.target;
+    this.setState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
+  handleSubmit(){
+    this.props.addData(this.state)
+    this.setState({
+      name:'',
+      status:''
+    });
+    this.props.fetchData();
+}
+  componentDidMount() {
+    this.props.fetchData();
+}
   render() {
     return (
       <div className="page-content page-container m-5" id="page-content">
@@ -46,15 +43,18 @@ class TaskList extends Component {
                     type="text"
                     className="form-control todo-list-input"
                     placeholder="What do you need to do today?"
+                    name="name"
+                    value={this.state.name}
+                    onChange={this.handleChange}
                   />
-                  <button className="add btn btn-primary font-weight-bold todo-list-add-btn">
+                  <button className="add btn btn-primary font-weight-bold todo-list-add-btn"onClick={()=>this.handleSubmit()}>
                     Add
                   </button>
                 </div>
                 <div className="list-wrapper">
                   <ul className="d-flex flex-column-reverse todo-list">
-                    {this.state.tasks.map((e, i) => (
-                      <List key={i} task={e} />
+                    {this.props.tasks.map((e, i) => (
+                      <List key={i} task={e} onSubmit={this.props.fetchData()}/>
                     ))}
                   </ul>
                 </div>
@@ -66,5 +66,18 @@ class TaskList extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+      tasks: state.TaskList.tasks
+  };
+};
 
-export default TaskList;
+const mapDispatchToProps = (dispatch) => {
+  return {
+      fetchData: () => dispatch(getTasks()),
+      addData: (data) => dispatch(addTasks(data)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskList);
+

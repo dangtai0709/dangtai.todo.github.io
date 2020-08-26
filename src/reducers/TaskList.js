@@ -1,11 +1,6 @@
-import {
-  ADD_TASK,
-  REMOVE_TASK,
-  UPDATE_TASK,
-  GET_TASKS,
-} from "../actions/TaskList";
+import { GET_TASKS } from "../actions/TaskList";
 const initialState = {
-  task: [],
+  tasks: [],
 };
 
 const TaskList = (state = initialState, { type, value }) => {
@@ -13,23 +8,8 @@ const TaskList = (state = initialState, { type, value }) => {
     case GET_TASKS:
       return {
         ...state,
-        task: value,
+        tasks: value?value:[],
       };
-    // case UPDATE_TASK:
-    //   return {
-    //     ...state,
-    //     task: value,
-    //   };
-    // case REMOVE_TASK:
-    //   return {
-    //     ...state,
-    //     task: value,
-    //   };
-    // case ADD_TASK:
-    //   return {
-    //     ...state,
-    //     task: value,
-    //   };
     default:
       return state;
   }
