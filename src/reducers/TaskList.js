@@ -8,7 +8,7 @@ const TaskList = (state = initialState, { type, value }) => {
     case GET_TASKS:
       return {
         ...state,
-        tasks: value?value:[],
+        tasks: value,
       };
     default:
       return state;

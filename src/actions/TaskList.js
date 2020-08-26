@@ -4,11 +4,15 @@ export const REMOVE_TASK = "REMOVE_TASK";
 export const UPDATE_TASK = "UPDATE_TASK";
 export const GET_TASKS = "GET_TASKS";
 
-export const itemsFetchData = (res) => {
-  res = Object.keys(res).map((key) => { return {...res[key],id:key}} )
+export const itemsFetchData = (value) => {
+  value = value
+    ? Object.keys(value).map((key) => {
+        return { ...value[key], id: key };
+      })
+    : [];
   return {
     type: GET_TASKS,
-    value: res,
+    value,
   };
 };
 export function getTasks() {
@@ -35,7 +39,7 @@ export function addTasks(params) {
         }
         return response;
       })
-      .then((response) => dispatch(itemsFetchData(response.data)))
+      .then((response) => dispatch(getTasks()))
       .catch((e) => console.log(e));
   };
 }
@@ -49,7 +53,7 @@ export function removeTasks(params) {
         }
         return response;
       })
-      .then((response) => dispatch(itemsFetchData(response.data)))
+      .then((response) => dispatch(getTasks()))
       .catch((e) => console.log(e));
   };
 }
@@ -63,7 +67,7 @@ export function updateTasks(id, params) {
         }
         return response;
       })
-      .then((response) => dispatch(itemsFetchData(response.data)))
+      .then((response) => dispatch(getTasks()))
       .catch((e) => console.log(e));
   };
 }

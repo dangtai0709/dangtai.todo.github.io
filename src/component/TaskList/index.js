@@ -20,15 +20,15 @@ class TaskList extends Component {
     }));
   }
   handleSubmit(){
+    if(!this.state.name) return;
     this.props.addData(this.state)
     this.setState({
       name:'',
       status:''
     });
-    this.props.fetchData();
 }
-  componentDidMount() {
-    this.props.fetchData();
+componentDidMount() {
+  this.props.fetchData();
 }
   render() {
     return (
@@ -54,7 +54,7 @@ class TaskList extends Component {
                 <div className="list-wrapper">
                   <ul className="d-flex flex-column-reverse todo-list">
                     {this.props.tasks.map((e, i) => (
-                      <List key={i} task={e} onSubmit={this.props.fetchData()}/>
+                      <List key={i} task={e} onSubmit={()=> this.props.fetchData()}/>
                     ))}
                   </ul>
                 </div>

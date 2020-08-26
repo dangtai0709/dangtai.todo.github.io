@@ -24,14 +24,17 @@ class List extends Component {
       }));
   }
   handleSubmit(){
-      this.handleEdit(false);
+      if(!this.state.name) return;
       let data = {...this.props.task,...this.state};
       delete data.edit
       delete data.id
       this.props.updateData(this.props.task.id,data)
+      this.handleEdit(false);
+      this.props.onSubmit()
   }
   handleRemove(){
     this.props.removeData(this.props.task.id)
+    this.props.onSubmit()
 }
   render() {
     return (
