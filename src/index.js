@@ -3,8 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { Provider } from 'react-redux'
-import store from './store'
+import { applyMiddleware,createStore } from 'redux';
+import { Provider} from 'react-redux'
+import createSagaMiddleware from 'redux-saga';
+import  TaskListSaga from "./reducers/TaskListSaga";
+import rootSaga from "./actions/rootSaga";
+
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(TaskListSaga, applyMiddleware(sagaMiddleware));
+sagaMiddleware.run(rootSaga);
 ReactDOM.render(
   <Provider store={store}>
   <App/>

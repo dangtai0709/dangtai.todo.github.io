@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { removeTasks, updateTasks } from "../../../actions/TaskList";
 import { connect } from "react-redux";
 class List extends Component {
   constructor(props) {
@@ -90,8 +89,8 @@ class List extends Component {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    removeData: (data) => dispatch(removeTasks(data)),
-    updateData: (id, data) => dispatch(updateTasks(id, data)),
+    removeData: (data) => dispatch({ type: "REMOVE_TASK_REQUEST",id:data }),
+    updateData: (id, data) => dispatch({ type: "UPDATE_TASK_REQUEST",id,data }),
   };
 };
 export default connect(null, mapDispatchToProps)(List);

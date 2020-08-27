@@ -1,7 +1,6 @@
 import "./TaskList.css";
 import React, { Component} from "react";
 import List from "./List";
-import {getTasks,addTasks} from '../../actions/TaskList'
 import { connect } from 'react-redux';
 class TaskList extends Component {
   constructor(props) {
@@ -68,14 +67,14 @@ componentDidMount() {
 }
 const mapStateToProps = (state) => {
   return {
-      tasks: state.TaskList.tasks
+      tasks: state.tasks
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      fetchData: () => dispatch(getTasks()),
-      addData: (data) => dispatch(addTasks(data)),
+      fetchData: () => dispatch({ type: "API_CALL_REQUEST" }),
+      addData: (data) => dispatch({ type: "ADD_TASK_REQUEST",data}),
   };
 };
 
